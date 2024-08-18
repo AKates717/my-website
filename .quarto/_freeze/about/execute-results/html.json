@@ -1,0 +1,14 @@
+{
+  "hash": "736c6ba4a60e317c6490791837770d6a",
+  "result": {
+    "markdown": "---\ntitle: \"Hi, I'm Andrew\"\nabout:\n  id: hero-heading\n  template: jolla\n  image: images/M&J-77.jpg\n  links:\n    - icon: twitter\n      text: twitter\n      href: https://twitter.com\n    - icon: github\n      text: Github\n      href: https://github.com\nbibliography: references.bib\n---\n\n\n::: {#hero-heading}\nMy name is Andrew Kates. I work as a Sport Scientist at the Canadian Sport Institute Pacific in Whistler, British Columbia, Canada. I am also a PhD student in Biomechanics at the University of Victoria.\n:::\n\n#### Education\n\nI have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists\n\n#### Experience\n\nOn this website you will find my blog, in which I will write primarily about Strength and Conditioning and practical Data Science for sport.\n\n\n::: {.cell}\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\n10*10\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 100\n```\n:::\n:::\n\n\nMore writing\n\n[@fransz2016] [@tran2015]\n\nMore Writing again\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

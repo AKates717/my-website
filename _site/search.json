@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Andrew Kates",
+    "section": "",
+    "text": "Thank you for visiting my site\n\n1 + 1\n\n[1] 2\n\n2 + 2\n\n[1] 4"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Hi, I’m Andrew",
+    "section": "",
+    "text": "Education\nI have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists\n\n\nExperience\nOn this website you will find my blog, in which I will write primarily about Strength and Conditioning and practical Data Science for sport.\n\n\n[1] 2\n\n\n\n10*10\n\n[1] 100\n\n\nMore writing\n(Fransz et al. 2016) (Tran et al. 2015)\nMore Writing again\n\n\n\n\n\n\nReferences\n\nFransz, Duncan P, Arnold Huurnink, Vosse A de Boode, Idsart Kingma, and Jaap H van Dieen. 2016. “The Effect of the Stability Threshold on Time to Stabilization and Its Reliability Following a Single Leg Drop Jump Landing.” Journal of Biomechanics 49 (3): 496–501. https://doi.org/10.1016/j.jbiomech.2015.12.048.\n\n\nTran, Tai T., Lina Lundgren, Josh Secomb, Oliver R. L. Farley, G. Gregory Haff, Robert U. Newton, Sophia Nimphius, and Jeremy M. Sheppard. 2015. “Development and Evaluation of a Drop-and-Stick Method to Assess Landing Skills in Various Levels of Competitive Surfers.” International Journal of Sports Physiology & Performance 10 (3): 396–400. https://doi.org/10.1123/ijspp.2014-0375."
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "My Blog",
+    "section": "",
+    "text": "S&C\n\n\n\n\nblog post description (appears underneath the title in smaller text) which is included on the listing page\n\n\n\n\n\n\nAug 13, 2024\n\n\nAndrew Kates\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "Posts/2024-08-13-My-First-Post/index.html",
+    "href": "Posts/2024-08-13-My-First-Post/index.html",
+    "title": "Why warm up when you can play Spikeball?",
+    "section": "",
+    "text": "But back to 2018, this is when I started working with Freestyle skiers, perhaps in a more true sense of the word. While this group was undoubtedly composed of some of the most outstanding athletes I’ve ever seen, they were a bit hesitant to welcome someone transitioning from the more serious world of Mogul skiing, to the more laid back world of halfpipe skiing.  It was clear I had a lot of work ahead of me if I wanted to infiltrate the cool kids and spread the gospel of an important warm up.\nSo after a semi-demoralizing camp, where a good day consisted of some mini-band work in the parking lot, and an average day meant strapping up the ski boots and strolling over to the oh-so-comfortable chair lift, I knew I had to do something.\n\nknitr::kable(\n  mtcars[1:6, 1:10]\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmpg\ncyl\ndisp\nhp\ndrat\nwt\nqsec\nvs\nam\ngear\n\n\n\n\nMazda RX4\n21.0\n6\n160\n110\n3.90\n2.620\n16.46\n0\n1\n4\n\n\nMazda RX4 Wag\n21.0\n6\n160\n110\n3.90\n2.875\n17.02\n0\n1\n4\n\n\nDatsun 710\n22.8\n4\n108\n93\n3.85\n2.320\n18.61\n1\n1\n4\n\n\nHornet 4 Drive\n21.4\n6\n258\n110\n3.08\n3.215\n19.44\n1\n0\n3\n\n\nHornet Sportabout\n18.7\n8\n360\n175\n3.15\n3.440\n17.02\n0\n0\n3\n\n\nValiant\n18.1\n6\n225\n105\n2.76\n3.460\n20.22\n1\n0\n3\n\n\n\n\n\nSo on our next training camp, when we rolled up to the parking lot with no sufficient warm-up area in sight, I pulled the black and yellow bag out of the truck and started assembling what looked to the athletes like a mini-trampoline.  A few of them knew what it was, and were cautiously enthused, and a few others ranged in feeling from skeptical to embarrassed.  \n\n\nplot(cars)\nplot(iris)\nplot(pressure)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCitationBibTeX citation:@online{kates2024,\n  author = {Andrew Kates},\n  editor = {},\n  title = {Why Warm up When You Can Play {Spikeball?}},\n  date = {2024-08-13},\n  url = {https://samanthacsik.github.io/posts/2022-10-24-my-blog-post/},\n  langid = {en}\n}\nFor attribution, please cite this work as:\nAndrew Kates. 2024. “Why Warm up When You Can Play\nSpikeball?” August 13, 2024. https://samanthacsik.github.io/posts/2022-10-24-my-blog-post/."
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Andrew Kates",
+    "section": "Education",
+    "text": "Education\nI have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists"
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "Andrew Kates",
+    "section": "Experience",
+    "text": "Experience\nOn this website you will find my blog, in which I will write primarily about Strength and Conditioning and practical Data Science for sport.\n\n1 + 1\n\n[1] 2\n\n\n\n10*10\n\n[1] 100\n\n\nMore writing\nMore Writing again"
+  }
+]

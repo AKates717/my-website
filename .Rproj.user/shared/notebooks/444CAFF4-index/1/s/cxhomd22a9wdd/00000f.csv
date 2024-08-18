@@ -1,0 +1,4 @@
+"0","#| column: screen-inset-shaded"
+"0","#| layout-nrow: 1"
+"0",""
+"0","plot(cars)"

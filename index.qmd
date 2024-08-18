@@ -1,0 +1,13 @@
+---
+title: "Andrew Kates"
+---
+
+This is the personal website of Andrew Kates.
+
+Thank you for visiting my site
+
+```{r}
+1 + 1
+
+2 + 2
+```

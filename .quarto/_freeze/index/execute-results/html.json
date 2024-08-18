@@ -1,0 +1,14 @@
+{
+  "hash": "5389ea0a3c57972075341f9a292e3c33",
+  "result": {
+    "markdown": "---\ntitle: \"Andrew Kates\"\n---\n\n\nThis is the personal website of Andrew Kates.\n\nThank you for visiting my site\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n\n```{.r .cell-code}\n2 + 2\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 4\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
