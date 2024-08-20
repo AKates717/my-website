@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: 9522427c-456d-43be-9c8a-ef2752a156cf
+      url: 'https://andrewkates.netlify.app'
