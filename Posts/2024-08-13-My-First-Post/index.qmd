@@ -1,58 +1,35 @@
 ---
 title: "Why warm up when you can play Spikeball?"
-description: "blog post description (appears underneath the title in smaller text) which is included on the listing page"
+description: "Reminiscing on an outside-the-box solution to improve pre-skiing warm up in freestyle skiers"
 author:
   - name: Andrew Kates
-    url: https://samanthacsik.github.io/
-    orcid: 0000-0002-5300-3075
-    affiliation: University of Victoria
-    affiliation-url: https://uvic.ca 
 date: 08-13-2024
 categories: ["S&C"] # self-defined categories
-citation: 
-  url: https://samanthacsik.github.io/posts/2022-10-24-my-blog-post/ 
 image: spikeball-canada.jpg
-draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+draft: true # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: references.bib
 ---
 
 For my first ever blog post, I've decided to write about something that's near and dear to my heart; Spikeball.
 
-234567
-
-45678
-
 In 2018 I began working with Freestyle skiers.  Well actually, that's not entirely true.  I began working with Freestyle skiers in 2015. Mogul skiers to be specific. hard working ,traditional yada yada
 
 But back to 2018, this is when I started working with Freestyle skiers, perhaps in a more true sense of the word. While this group was undoubtedly composed of some of the most outstanding athletes I've ever seen, they were a bit hesitant to welcome someone transitioning from the more serious world of Mogul skiing, to the more laid back world of halfpipe skiing.  It was clear I had a lot of work ahead of me if I wanted to infiltrate the cool kids and spread the gospel of an important warm up.
 
+::: columns
+::: {.column width="50%"}
 So after a semi-demoralizing camp, where a good day consisted of some mini-band work in the parking lot, and an average day meant strapping up the ski boots and strolling over to the oh-so-comfortable chair lift, I knew I had to do something.
+:::
 
-[@fransz2015a]
+::: {.column width="50%"}
+![Mount Hood, Summer 2018.](MtHood2018.PNG){fig-align="right" width="280"}
+:::
+:::
 
-[@tran2015]
-
-[@albaladejo-saura2021; @alentorn-geli2009]
-
-```{r}
-#| column: page
-
-knitr::kable(
-  mtcars[1:6, 1:10]
-)
-```
-
-So on our next training camp, when we rolled up to the parking lot with no sufficient warm-up area in sight, I pulled the black and yellow bag out of the truck and started assembling what looked to the athletes like a mini-trampoline.  A few of them knew what it was, and were cautiously enthused, and a few others ranged in feeling from skeptical to embarrassed.  
+So, on our next training camp, when we rolled up to the parking lot with no sufficient warm-up area in sight, I pulled the black and yellow bag out of the truck and started assembling what looked to the athletes like a mini-trampoline. A few of them knew what it was, and were cautiously enthused, and a few others ranged in feeling from skeptical to embarrassed.
 
 ![](spikeball-canada.jpg){.column-screen}
 
-```{r}
-#| column: screen-inset-shaded
-#| layout-nrow: 1
+Just for fun, I ran search on [Google Scholar](https://scholar.google.com/) using only the word "spikeball". Look at that, 505 results! @paul2024
 
-plot(cars)
-plot(iris)
-plot(pressure)
-
-
-```
+Some writing [@paul2024].

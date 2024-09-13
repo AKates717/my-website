@@ -1,13 +1,21 @@
 ---
-title: "Andrew Kates"
+title: ""
+image: images/M&J-77.jpg
+toc: false
+about:
+  template: jolla
+  links:
+    - icon: instagram
+      text: instagram
+      href: https://instagram.com
+    - icon: github
+      text: Github
+      href: https://github.com/AKates717
+    - icon: envelope
+      text: Email
+      href: mailto:akates@uvic.ca
 ---
 
-This is the personal website of Andrew Kates.
-
-Thank you for visiting my site
-
-```{r}
-1 + 1
-
-2 + 2
-```
+::: {style="text-align: center;"}
+My name is Andrew Kates. I work as a Sport Scientist at the Canadian Sport Institute Pacific in Whistler, British Columbia, Canada. I am also a PhD student in Biomechanics at the University of Victoria. On this website you will find my blog, in which I will write primarily about Strength and Conditioning and practical Data Science for sport.
+:::

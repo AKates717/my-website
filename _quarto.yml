@@ -3,27 +3,27 @@ project:
 
 website:
   title: Andrew Kates
+  favicon: images/AK_logo1_transparent-crop.png
   navbar:
-    title: Andrew Kates
+    title: false
+    logo: images/AK_logo1_transparent-crop.png
+    logo-alt: "Take me to the homepage"
     pinned: true
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+    right:
+      - href: about.qmd
+        text: About
       - posts.qmd # add your posts.qmd file to your navbar!
   page-footer: 
     left: "Copyright 2024, Andrew Kates"
-    right:
-      - icon: github
-        href: https://github.com/
-      - icon: twitter 
-        href: https://twitter.com/ 
-
+    right: This website is built with [R](https://www.r-project.org/about.html){target=_blank} and [Quarto](https://quarto.org/){target=_blank}
+    
 format:
   html:
-    theme: flatly
-    css: styles.css
+    theme: styles.scss
+    mainfont: Moderustic
     toc: true
+    page-layout: full
+    link-external-newwindow: true
 
 editor: visual
 

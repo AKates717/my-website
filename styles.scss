@@ -1,0 +1,67 @@
+/*-- scss:defaults --*/
+
+// Import Fonts
+@import url('https://fonts.googleapis.com/css2?family=Moderustic:wght@300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+// Colors
+$dark-green: #858E79;
+$light-green: #f8fdf6;
+$cream: #FDFBF7;
+$gray: #64605f;
+$purple: #9158A2;
+$orange: #ad7237;
+$light-blue: #d3f1fc;
+
+// Base document colors
+$navbar-bg: $light-blue; // navbar
+$navbar-fg: $dark-green; // navbar foreground elements
+$navbar-hl: $purple; // highlight color when hovering over navbar links
+$body-bg: $light-green; // page background 
+$body-color: $gray; // page text 
+$footer-bg: $cream; // footer 
+$link-color: $purple; // hyperlinks 
+
+
+// Inline code
+$code-bg: $cream; // inline code background color
+$code-color: $purple; // inline code text color
+
+
+
+
+
+/*-- scss:rules --*/
+
+.navbar-brand img { 
+  max-height: 50px;
+  width: auto;
+}
+
+body.nav-fixed {
+  padding-top: 0px;
+}
+
+div.quarto-about-jolla main {
+  border-top: solid 3px $navbar-bg;
+  border-bottom: solid 3px $navbar-bg;
+  border-radius: 0;
+  padding-top: 20px;
+}
+
+div.quarto-about-jolla {
+  margin-top: 3%;
+}
+
+#title-block-header {
+  margin-block-end: 0rem;
+}
+
+div.quarto-about-jolla .about-sep {
+  width: 0%;
+}
+
+
+
+
+
+

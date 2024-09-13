@@ -1,40 +1,39 @@
 ---
-title: "Hi, I'm Andrew"
+title: ""
 about:
-  id: hero-heading
-  template: jolla
+  template: trestles
   image: images/M&J-77.jpg
   links:
-    - icon: twitter
-      text: twitter
-      href: https://twitter.com
+    - icon: instagram
+      text: instagram
+      href: https://instagram.com
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/AKates717
+    - icon: envelope
+      text: Email
+      href: mailto:akates@uvic.ca
 bibliography: references.bib
 ---
 
-::: {#hero-heading}
-My name is Andrew Kates. I work as a Sport Scientist at the Canadian Sport Institute Pacific in Whistler, British Columbia, Canada. I am also a PhD student in Biomechanics at the University of Victoria.
-:::
+# Highlights/Expertise
 
-#### Education
+10 Years Coaching in High Performance Sport
 
-I have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists
+ACL Rehabilitation
 
-#### Experience
+Neuromuscular Testing
 
-On this website you will find my blog, in which I will write primarily about Strength and Conditioning and practical Data Science for sport.
+Practical Data Science for Sport
 
-```{r}
-#| echo: false
-1 + 1
-```
+## Education
 
-```{r}
-10*10
-```
+**PhD Student** (Current) \| University of Victoria
 
-More writing
+**M.Sc. Kinesiology** (2014) \| University of Victoria
 
-More Writing again
+**B.Sc. Kinesiology** (2011) \| Dalhousie University
+
+## Experience
+
+I have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists while travelling all over the world, including the 2022 Olympic Winter Games in Beijing.

@@ -1,0 +1,23 @@
+/* css styles */
+
+h1 {
+  color: green;
+  background-color: #ffa1ab;
+  border-radius: 25px;
+  letter-spacing: 10px;
+  text-align: center;
+}
+
+a {
+  color: #ffa1ab;
+  font-style: italic;
+}
+
+.blue-text{
+  color: blue;
+}
+
+.big-red-text{
+  color: red;
+  font-size: 30px;
+}

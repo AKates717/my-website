@@ -1,6 +1,6 @@
 ---
-title: "My Blog"
-subtitle: "Thoughts and musings, mostly about sport science"
+title: "Blog"
+subtitle: "Let's see where this goes... kicking it off with some sport science talk"
 
 listing:
   contents: Posts # all Quarto docs in the `Posts` directory will be included on listing page

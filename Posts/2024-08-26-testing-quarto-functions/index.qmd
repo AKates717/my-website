@@ -1,0 +1,150 @@
+---
+title: Quarto Features Testing
+description: "Using this post to test out different features of Quarto as I work through the documentation"
+author:
+  - name: Andrew Kates
+    url: https://github.com/AKates717
+date: 08-19-2024
+categories: ["R"]
+image: CMJ.ppm
+draft: false
+execute: 
+  echo: true
+code-fold: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(readxl)
+library(magick)
+library(beepr)
+library(leaflet)
+
+source("~/Dropbox/Data Science/Website/plot_functions.R")
+
+recent_five <- read_csv("recent_five.csv")
+```
+
+```{mermaid}
+%%| fig-width: 6.5
+flowchart LR
+  A[Hard edge] --> B(Round edge)
+  B --> C{Decision}
+```
+
+The video shortcode does not work for some reason. But simply copying the embed link from youtube/share does work..
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pHR07EuEKjM?si=dAsEipz0uDA8q-uN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+
+</iframe >
+
+::: {#nte-example .callout-note title="Tip with Title" collapse="true"}
+## This is a note.
+
+hkjhkjhkhkjkjkhjj
+:::
+
+For some reason, linking to my note doesn't work: @nte-example ...
+
+## Code Anotations
+
+don't work
+
+## Article Layout
+
+Attributes/Classes/.column-body-outset
+
+![](spikeball-canada.jpg){.column-body-outset}
+
+Attributes/Classes/.column-page
+
+![](spikeball-canada.jpg){.column-page}
+
+Some output from code (a table) that is as wide as the screen.
+
+```{r}
+#| column: screen
+#| echo: false
+
+knitr::kable(
+  mtcars[1:6, 1:10]
+)
+```
+
+```{r}
+#| column: screen
+
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-123.12, lat=49.28, popup="Go Leafs Go")
+```
+
+{{< pagebreak >}}
+
+Margin Content. maybe needs to be a full paragrpah, wewqefkjjjjjjjjjjjasdnvfkjhekajhfjkefkjhbfdkjbsdkfjhbqefkjhbadkjh bdkjbkjbdsfkjhdbck ajhsbdzckjahdbkjhdb kajhbckhjdbc kjhdbckshdb ckjhdsbkjhzbxcka hjdzbcksadhbcksjhb ckajshdbckjahdbck jhabdkjhadbkjhbkajhd kjhabkhjabkajhbc
+
+::: column-margin
+We know from *the first fundamental theorem of calculus* that for $x$ in $[a, b]$:
+
+$$\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x).$$
+:::
+
+Asides
+
+Here is the main content
+
+::: aside
+This goes to the side i guess
+:::
+
+more main content
+
+![](more-hops.gif)
+
+```{r}
+
+recent_five %>%
+  ggplot(aes(x = factor(Date, ordered = T))) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1) +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 2, alpha = 0.5, width = 0.2) +
+  #geom_hline(aes(yintercept = mean(as.numeric(flight_height_tov))), alpha = 0.3, linetype = 2, linewidth = 1.5) +
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+ggsave("beaches.png")
+
+beachplot <- image_read("beaches.png")
+wizgif <- image_read("~/Dropbox/Data Science/Website/Posts/2024-08-26-testing-quarto-functions/more-hops.gif")
+
+frames <- image_composite(beachplot, wizgif, offset = "+100+100")
+
+animation <- image_animate(frames, fps = 10)
+image_write(animation, "beachwiz.gif")
+
+```
+
+![](/beachwiz.gif){width="366"}
+
+List
+
+-   sdasdsd
+
+-   asdadas
+
+-   mdhfkj
+
+Tight List (cmd-alt-9)
+
+-   sdfjlhdkf
+-   dsajkfahdsf
+-   kjasdff
+-   
