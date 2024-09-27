@@ -5,12 +5,13 @@
 
 // Colors
 $dark-green: #858E79;
-$light-green: #f8fdf6;
+$light-green: #f8fdf8;
 $cream: #FDFBF7;
 $gray: #64605f;
 $purple: #9158A2;
 $orange: #ad7237;
 $light-blue: #d3f1fc;
+$dark-blue: #2D96B1;
 
 // Base document colors
 $navbar-bg: $light-blue; // navbar
@@ -19,12 +20,12 @@ $navbar-hl: $purple; // highlight color when hovering over navbar links
 $body-bg: $light-green; // page background 
 $body-color: $gray; // page text 
 $footer-bg: $cream; // footer 
-$link-color: $purple; // hyperlinks 
+$link-color: $dark-blue; // hyperlinks 
 
 
 // Inline code
 $code-bg: $cream; // inline code background color
-$code-color: $purple; // inline code text color
+$code-color: $dark-blue; // inline code text color
 
 
 

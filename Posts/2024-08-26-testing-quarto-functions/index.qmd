@@ -7,7 +7,7 @@ author:
 date: 08-19-2024
 categories: ["R"]
 image: CMJ.ppm
-draft: false
+draft: true
 execute: 
   echo: true
 code-fold: true

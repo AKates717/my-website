@@ -7,72 +7,29 @@ author:
 date: 08-19-2024
 categories: ["S&C","R", "ggplot2"]
 image: CMJ.ppm
+# format: 
+#   html: 
+#     fig-width: 4
+#     fig-height: 3
 draft: false
 execute: 
   echo: true
 code-fold: show
+code-tools: true
 editor_options: 
   chunk_output_type: console
+reference-location: margin
 ---
 
-If you are a strength and conditioning (S&C) coach or sport scientist, there's a good chance you collect countermovement jump (CMJ) data with your athletes, and an equally good chance you use Microsoft Excel to work with your data. In fact, S&C coaches have been plotting CMJ results in Microsoft Excel since the mid 1500s.
+As an S&C coach, you are probably aware of the story of [Milo of Croton](https://en.wikipedia.org/wiki/Milo_of_Croton). Milo was a Greek athlete in the late 6th century BC who would begin an Olympic training cycle by carrying a newborn calf on his back everyday. Over time the calf would grow bigger and bigger, and Milo would grow stronger and stronger. Eventually he would be carrying a four year old cow on his back and he'd be in peak shape for the Olympics.[^1] What you probably didn't know, is that Milo's strength and conditioning coach was actually plotting his progress in Microsoft Excel. Of course, this was almost 3000 years ago, and just as training methods have progressed, so have our tools for analyzing data. This is why I've created this step-by-step guide to take you from an excel spreadsheet containing jump heights (or cow mass measurements) to a beautiful plot built using R, that will take your reports to the next level.
 
-More recently, however, the sport science community has embraced more advanced tools for data analysis, with R being a popular choice.
+[^1]: Also: "He carried the full-grown cow the length of the stadium, then proceeded to kill, roast, and eat it." You can't make this stuff up.
 
 ## Who is this post for?
 
-Maybe you collect data from force plates but you don't have a system for analyzing that data. Maybe you don't have force plates, but you're able to collect jumps from a jump mat, or an application like MyJump. Or maybe you have access to a consumer grade system, like Vald Force Decks or Hawkin Dynamics, but you want to build custom reports outside of those systems. If any of these describe you, I hope you will be able to learn from this post.
+This post is for anyone who works in sport or fitness, collects jump data with their athletes/clients, and is at least somewhat familiar with using R and R Studio. A basic understanding of the [ggplot2](https://ggplot2.tidyverse.org/) package will also be helpful.
 
-## Getting Set Up
-
-This post does assume that you have R and R Studio installed on your computer, and that you are at least a little bit familiar with coding in R Studio.
-
-We will start by installing and loading all necessary packages. I will also source some pre-built functions, which are outside the scope of this post, but which you can find in the github repository for this site.
-
-```{r}
-#| echo: true
-#| output: false
-
-library(tidyverse)
-library(readxl)
-library(janitor)
-#library(bslib)
-#library(ggthemes)
-#library(lubridate)
-#library(thematic)
-#library(plotly)
-#library(patchwork)
-#library(scales)
-#library(gt)
-#library(gtExtras)
-#library(withr)
-#library(ggpp)
-#library(ggimage)
-
-#shouldn't need this
-source("~/Dropbox/Data Science/Website/plot_functions.R")
-
-
-```
-
-## Data Import and Preparation
-
-For the purposes of this post, I've created a table containing five days worth of CMJ results for a fictional athlete. The table is very simple and contains only three columns; date, jump number, and jump height.
-
-for this post, need to make sure that whatever table I show the reader, that I'm creating the ggplot from that table (not from my own version with athlete names). Might be best to include a csv in the repo and just import from there.
-
-```{r}
-#| output: false
-
-recent_five <- read_csv("recent_five.csv")
-```
-
-```{r}
-#| label: tbl1
-recent_five
-```
-
-As you can see, our fictional athlete has performed 3 jumps on each of 5 different days between June 14, 2024 and August 14, 2024. Now that we have a very simple data set to work with, let's define what we would like our plot to display.
+Maybe you collect data from force plates but you don't have a system for analyzing that data. Maybe you use a consumer grade system, like Vald Force Decks or Hawkin Dynamics, but you want to build custom reports outside of those systems. Or maybe you don't have force plates, but you collect jumps from a jump mat, or an application like MyJump. If any of these describe you, I hope you will find this post useful.
 
 ## What am I trying to accomplish with this plot?
 
@@ -88,13 +45,40 @@ I want my plot to clearly show:
 
 4.  Average performance across all 5 dates
 
-Now, that's a lot of information for one plot, so let's go one step at a time, and see if we can communicate all of this information in a visually pleasing, non-overwhelming manner.
+Now, that's a lot of information for one plot, so let's go one step at a time, and see if we can communicate all of this information in an aesthetically pleasing, non-cluttered plot.
+
+## Getting Set Up
+
+We will start by installing and loading all necessary packages.
+
+```{r}
+#| echo: true
+#| output: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+```
+
+For the purposes of this post, I've created a simple spreadsheet containing five days worth of CMJ results for a fictional athlete. You can access the file [here](https://github.com/AKates717/my-website/blob/master/Posts/2024-08-19-cmj-tracking1/recent_five.csv), or you can create your own in excel and read it into R Studio, as seen below. The data will be loaded into the R Studio Environment as a data-frame titled `recent_five`.
+
+```{r}
+#| output: false
+
+recent_five <- read_csv("recent_five.csv")
+```
+
+```{r}
+#| label: tbl1
+#| echo: false
+recent_five
+```
 
 ## Creating the Plot
 
-#### 1. Average Daily Jump Height
+### 1. Average Daily Jump Height
 
-We will start by taking our `recent_five` data-frame, and creating a `ggplot` with the date on the x-axis. We will also use a function called `stat_summary` to create a mean score for each date.
+We will start by taking our `recent_five` data-frame, and creating a plot using the `ggplot` function.
 
 ```{r}
 #| label: fig-cmj1
@@ -102,32 +86,63 @@ We will start by taking our `recent_five` data-frame, and creating a `ggplot` wi
 #| echo: true
 
 recent_five %>%
-  ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point")
+  ggplot(aes(x = factor(Date, ordered = TRUE))) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6)
 
 ```
 
-So now we've created the basic plot, and we've also added our first "layer"; mean jump height for each date.
+As you can see, we've created the basic plot, and we've also added our first layer of data; mean jump height for each date. There's a couple things that bear mentioning here:
 
-Before we continue adding layers to the plot, however, I'm going to clean it up a bit with some custom themes.
+1.  I have turned the date into a factor, as I prefer to visualize the jumps as being "equally spaced", so to speak. It can also be useful to plot the dates chronologically, so you can get an idea of how much time has passed between testing sessions, but this can easily ruin the appearance of the plot, especially if you have long, inconsistent gaps between jump assessments.
+2.  Using stat_summary allows me to do calculations within the layer of the plot, and saves me from creating more data-frames. The practicality of this should hopefully become increasingly apparent as we add more layers to the plot. In this case, I have asked stat_summary to take the jump height values, group them by date, create mean scores, and display them as size 6 points.
+
+We now have a basic plot for our primary outcome measure, mean jump height, and our next step is to add maximum jump height. But before we continue adding layers to the plot, I'm going to clean it up a bit with some custom themes.
+
+#### Brief Intermission:  Adding a Theme
 
 ```{r}
 #| label: fig-themes
 #Create a custom theme for my plots and save it as ak_plot_theme
 
-#copy/paste ak_plot_theme
+ak_plot_theme <- function(..., base_size = 12) {
+  theme(
+    text = element_text(size = base_size),
+    axis.ticks = element_blank(),
+    axis.title = element_text(color = "black",
+                              face = "bold"),
+    axis.text = element_text(color = "black",
+                             face = "bold"),
+    axis.text.x = element_text(angle = 40, hjust =0.6, vjust = 0.8),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 16,
+                              color = "black",
+                              vjust = 5),
+    plot.subtitle = element_text(color = "black",
+                                 hjust = 0.5),
+    plot.caption = element_text(size = 8,
+                                face = "italic",
+                                color = "black"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major =  element_line(color = "#e0e0e0"),
+    panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff"),
+    plot.background = element_blank(),
+    panel.border = element_blank())
+}
 ```
 
-Below, you can see that I've added my theme as an additional layer to the plot. I've also changed the size of the "mean" data points, and I've customized the labels using `labs()`.
+All the nuances of this theme are beyond the scope of this post, but here's what you need to know. `theme()` is a function from the `ggplot2` package that allows us to customize the way our plot looks. I have created a function which calls `theme()` and then sets parameters to define different components of the plots appearance. Saving this theme as a function allows me to add it to any plot as a layer, as seen below. This lets me keep a consistent style whenever I'm creating plots, and saves a lot of typing.
+
+Additionally, you can see I've customized the x, y, and title labels using `labs()`. Oh yeah, and I'm going to colour the data points gold using `colour = "D19A2B"`.
 
 ```{r}
 #| label: fig-cmj-themed
-#| fig-cap: Countermovement jump heights from the last five testing dates
+#| fig-cap: Okay, that's better.
 #| echo: true
 
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
   ak_plot_theme() +
   labs(
     x = NULL,
@@ -135,20 +150,19 @@ recent_five %>%
     title = NULL)
 ```
 
-#### 2. Best Daily Jump Height
+### 2. Best Daily Jump Height
 
-Now we've got our basic plot, with a bit of formatting to make it look good, let's add a point to show the best (highest) jump our athlete performed each day.
+Now let's add a point to show the best (highest) jump our athlete performed each day.
 
 ```{r}
 #| label: fig-cmj2
 #| fig-cap: Countermovement jump heights from the last five testing dates
-#| cap-location: margin
 #| echo: true
 
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
     ak_plot_theme() +
   labs(
     x = NULL,
@@ -156,11 +170,15 @@ recent_five %>%
     title = NULL)
 ```
 
-Great, we've got both average and maximum on the same plot. I'm just going to make some aesthetic improvements by
+Here I've used stat_summary again, but I've switched the function from mean to max, and I've decreased the size of the points from 6 to 4, indicating that mean jump height is our primary outcome measure, and maximum jump height is a secondary outcome measure.
 
-1.  Creating a custom function to draw a vertical line connecting the mean and max dots, then adding a layer using that function (@fig-cmj3-1 )
+Again, before moving on, I'm going to make two more aesthetic improvements:
 
-2.  Connecting the daily Mean scores with a line so we can see changes between daily scores a bit better (@fig-cmj3-2 ).
+1.  I've created a custom function to draw a vertical line connecting the mean and max dots. `Stat_summary` offers an argument called `fun.data` which allows you to compute multiple values at once. In this case, I've created a function that defines the mean and max values, and asked stat_summary to display a line connecting those two values[^2]. (@fig-cmj3-1 )
+
+2.  We will connect the daily mean scores with a line so we can see changes between daily scores a bit better (@fig-cmj3-2 ).
+
+[^2]: Honestly, I'm not 100% sure how fun.data communicates with my mean_peak function, but it works, so I'm not asking any questions
 
 ```{r}
 #| label: fig-cmj3
@@ -171,23 +189,32 @@ Great, we've got both average and maximum on the same plot. I'm just going to ma
 #| layout-ncol: 2
 #| column: page
 
+#draw a line between the mean and the max jump height
+mean_peak <- function(x) {
+  data.frame(y = (mean(x) + 0.0001),
+             ymax = max(x),
+             ymin = mean(x))
+}
+
+#Figure 4a: adding vertical lines
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
-  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
   ak_plot_theme() +
   labs(
     x = NULL,
     y = "Jump Height (cm)",
     title = NULL)
 
+#Figure 4b: adding line to connect mean jump heights
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
-  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
-  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
   ak_plot_theme() +
   labs(
     x = NULL,
@@ -195,9 +222,9 @@ recent_five %>%
     title = NULL)
 ```
 
-#### 3. Each Jump Performed
+### 3. Each Jump Performed
 
-Let's add a small dot so we can see the height of each jump.
+At this point, we've managed to display two different descriptive statistics in one nice clean plot. But like I said, we're being greedy here and we'd also like to see the height of every single jump. We'll add this data using a `geom_jitter` layer, which is basically just a `geom_point` that let's us spread the points out, making them a bit easier to see.
 
 ```{r}
 #| label: fig-cmj4
@@ -205,80 +232,51 @@ Let's add a small dot so we can see the height of each jump.
 
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
-  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
-  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1) +
-  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 2, alpha = 0.5, width = 0.2) +
-  #geom_hline(aes(yintercept = mean(as.numeric(flight_height_tov))), alpha = 0.3, linetype = 2, linewidth = 1.5) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
   ak_plot_theme() +
   labs(
     x = NULL,
     y = "Jump Height (cm)",
     title = NULL)
-  
-  
 ```
 
-#### 4. Average performance across all five dates
+### 4. Average performance across all five dates
 
-In Figure 5a, I've added a line representing the average jump height from our data set, which allows us to compare. 5b Average + SD? Look up some Hawkin values here. 5c A regression line to give a general idea of how the athlete's jump height is trending. I will discuss some options for analyzing these plots in a future blog post.
+Lastly, it would be helpful to know how each score compares to the overall mean for this athlete, so we'll add a horizontal line with the y-intercept set to the overall mean jump height.
 
-Future blog posts
-
--   Turning our ggplot2 plots into plotly plots
-
--   adding data analysis to our plots to measure changes in jump performance
-
-::: {layout="[ 40, 60 ]"}
-::: {#first-column}
-```{r}
-#| label: fig-cmj5
-#| fig-cap: Countermovement jump heights from the last five testing dates
-#| echo: true
-#| eval: false
-#| code-overflow: wrap
-
-recent_five %>%
-  ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
-  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
-  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1) +
-  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 2, alpha = 0.5, width = 0.2) +
-  #geom_hline(aes(yintercept = mean(as.numeric(flight_height_tov))), alpha = 0.3, linetype = 2, linewidth = 1.5) +
-  ak_plot_theme() +
-  labs(
-    x = NULL,
-    y = "Jump Height (cm)",
-    title = NULL)
-
-
-```
-
-Some text that should be laid out below the code
-:::
-
-::: {#second-column}
 ```{r}
 #| label: fig-cmj6
 #| fig-cap: Countermovement jump heights from the last five testing dates
-#| echo: false
-
 
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 4) +
-  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 2) +
-  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2) +
-  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1) +
-  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 2, alpha = 0.5, width = 0.2) +
-  #geom_hline(aes(yintercept = mean(as.numeric(flight_height_tov))), alpha = 0.3, linetype = 2, linewidth = 1.5) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
   ak_plot_theme() +
   labs(
     x = NULL,
     y = "Jump Height (cm)",
     title = NULL)
 ```
-:::
-:::
+
+## Next Steps
+
+In this blog post I have given step-by-step instructions on how to create a unique plot to visualize CMJ data. Although I am happy with the style of the plot, and the amount of information I have been able to include, there is one major flaw with the final product. Although we can see roughly where all of our data lines up with the y-axis, we have not communicated any actual values to our audience.
+
+Picture it, you share your beautiful plot with a coach or athlete and their first question is: "How high did I jump?". If all you have is this plot, what are you going to tell them? In the next blog post in this series, I will show you how to use `Plotly` to make our plot interactive, and to convey this vital information to our audience without ruining our minimalist aesthetic.
+
+Thanks for reading!
+
+Future blog posts
+
+-   Part 2: Creating an interactive plot: upgrading our `ggplot2` to `Plotly`
+
+-   Part 3: Adding data analysis to our plots to measure changes in jump performance
