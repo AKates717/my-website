@@ -7,12 +7,19 @@ author:
 date: 08-19-2024
 categories: ["R"]
 image: CMJ.ppm
+format:
+  html:
+    code-fold: true
+    #code-link: true
 draft: true
 execute: 
   echo: true
-code-fold: true
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
+bibliography: references.bib
+code-annotations: hover
+filters:
+  - line-highlight
 ---
 
 ```{r}
@@ -22,11 +29,15 @@ library(readxl)
 library(magick)
 library(beepr)
 library(leaflet)
+library(janitor)
+library(quarto)
 
 source("~/Dropbox/Data Science/Website/plot_functions.R")
 
 recent_five <- read_csv("recent_five.csv")
 ```
+
+## **Title in Bolds with some code 6\*9=`{r} 6*9`**
 
 ```{mermaid}
 %%| fig-width: 6.5
@@ -35,7 +46,13 @@ flowchart LR
   B --> C{Decision}
 ```
 
-The video shortcode does not work for some reason. But simply copying the embed link from youtube/share does work..
+## Videos
+
+Here is a video placed by inserting the url into video shortcode like so `{{< video url>}}` .
+
+{{< video https://www.youtube.com/watch?v=F-gHBa1ik20 >}}
+
+Here is a video placed by copying the embed link from youtube/share
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/pHR07EuEKjM?si=dAsEipz0uDA8q-uN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 
@@ -47,23 +64,36 @@ The video shortcode does not work for some reason. But simply copying the embed 
 hkjhkjhkhkjkjkhjj
 :::
 
-For some reason, linking to my note doesn't work: @nte-example ...
+Here I can link to my note using \@ @nte-example ...
 
-## Code Anotations
+## Links
 
-don't work
+`[TSN](https://www.tsn.ca/)` = [TSN](https://www.tsn.ca/)
 
-## Article Layout
+## Images and Article Layout
+
+This is the code:
+
+`![Graph](beaches.png)`
+
+but in the Visual editor, it's just easier to click on the image image in the toolbar
+
+![Graph](beaches.png){width="286"}
 
 Attributes/Classes/.column-body-outset
 
-![](spikeball-canada.jpg){.column-body-outset}
+![](spikeball-canada.jpg){#Spikeball1 .column-body-outset}
 
 Attributes/Classes/.column-page
 
 ![](spikeball-canada.jpg){.column-page}
 
 Some output from code (a table) that is as wide as the screen.
+
+```         
+Warning message:
+The downlit and xml2 packages are required for code linking
+```
 
 ```{r}
 #| column: screen
@@ -84,7 +114,7 @@ leaflet() %>%
 
 {{< pagebreak >}}
 
-Margin Content. maybe needs to be a full paragrpah, wewqefkjjjjjjjjjjjasdnvfkjhekajhfjkefkjhbfdkjbsdkfjhbqefkjhbadkjh bdkjbkjbdsfkjhdbck ajhsbdzckjahdbkjhdb kajhbckhjdbc kjhdbckshdb ckjhdsbkjhzbxcka hjdzbcksadhbcksjhb ckajshdbckjahdbck jhabdkjhadbkjhbkajhd kjhabkhjabkajhbc
+------------------------------------------------------------------------
 
 ::: column-margin
 We know from *the first fundamental theorem of calculus* that for $x$ in $[a, b]$:
@@ -92,19 +122,28 @@ We know from *the first fundamental theorem of calculus* that for $x$ in $[a, b]
 $$\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x).$$
 :::
 
-Asides
+The aside uses the class `.column-margin` , may need to play around with where it should be placed in the visual editor, in order to have it placed correctly when rendered. Looks like maybe it starts at the side of whatever element precedes it.
 
-Here is the main content
+Here is a quote [@ohta2003]
+
+Here is the main content, below I have written an aside
 
 ::: aside
-This goes to the side i guess
+This goes to the side i guess? is there a difference between aside and column-margin?
 :::
 
 more main content
 
+## GIFs
+
+Inserted as an image. The gif lives in the working directory for this post.
+
 ![](more-hops.gif)
 
 ```{r}
+#| eval: false
+#| include: false
+
 
 recent_five %>%
   ggplot(aes(x = factor(Date, ordered = T))) +
@@ -134,17 +173,82 @@ image_write(animation, "beachwiz.gif")
 
 ![](/beachwiz.gif){width="366"}
 
+## Code Anotations
+
+It doesn't seem like code annotations and highlights will work on the same line in html output, will have to choose one or the other. In this case, if `#<1>` comes before `#<<` , the annotations work but the highlighting gets messed up and highlights the wrong line.
+
+Also, if I remove `source-line-numbers: "x"` the output shows the YAML in the rendered doc for some reason.
+
+In this chunk in particular, the `source-line-numbers` doesn't work but the `#<<` does work. May have to check options when using this in the future.
+
+```{r}
+#| source-line-numbers: "1"
+#| label: fig-mpg
+#| column: page-right 
+#| fig-cap: City and highway mileage for 38 popular models of cars.
+#| fig-subcap: Color by number of cylinders,Color by engine displacement, in liters
+#| layout-ncol: 2
+
+
+ggplot(mpg, aes(x = hwy, y = cty, color = cyl)) + 
+  geom_point(alpha = 0.5, size = 2) +                 
+  scale_color_viridis_c() + #<<
+  theme_minimal() 
+
+ggplot(mpg, aes(x = hwy, y = cty, color = displ)) + 
+  geom_point(alpha = 0.5, size = 2) +
+  scale_color_viridis_c(option = "E") + #<1>
+  theme_minimal() 
+
+
+```
+
+1.  The ordered list must be placed immediately below the code cell
+
+```{r}
+#| source-line-numbers: "2"
+
+iris |> 
+  head(5)
+```
+
+### Custom layouts for multiple plots
+
+Could be useful for displaying one main plot, supported by 3 smaller plots
+
+```{r}
+#| layout: [[100], [30,30,30]]
+#| column: body
+
+plot(mtcars)
+plot(cars)
+plot(pressure)
+plot(cars)
+```
+
 List
 
--   sdasdsd
+-   A list needs a blank line above it, i.e. cannot be attached to a paragraph
 
--   asdadas
+-   this is an unordered list
 
--   mdhfkj
+    -   use tab. to create sub-items
 
-Tight List (cmd-alt-9)
+Tight List (cmd-option-9)
 
--   sdfjlhdkf
--   dsajkfahdsf
--   kjasdff
--   
+-   cross-reference to @fig-mpg
+-   cross-ref to @fig-mpg-1
+-   and to @fig-mpg-2
+-   list
+
+Task list - \[ \] Do this in source editor - \[ \] Do this in Visual Editor?
+
+## Footnotes
+
+Here is a footnote[^1] inserted from the toolbar in the visual editor
+
+[^1]: In the visual editor, it's easy to insert and edit from the toolbar.
+
+> Blockquate using \>
+
+<!--# comment? -->

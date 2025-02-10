@@ -4,9 +4,6 @@ about:
   template: trestles
   image: images/M&J-77.jpg
   links:
-    - icon: instagram
-      text: instagram
-      href: https://instagram.com
     - icon: github
       text: Github
       href: https://github.com/AKates717
@@ -16,7 +13,7 @@ about:
 bibliography: references.bib
 ---
 
-# Highlights/Expertise
+### Highlights/Expertise
 
 10 Years Coaching in High Performance Sport
 
@@ -26,7 +23,7 @@ Neuromuscular Testing
 
 Practical Data Science for Sport
 
-## Education
+### Education
 
 **PhD Student** (Current) \| University of Victoria
 
@@ -34,6 +31,6 @@ Practical Data Science for Sport
 
 **B.Sc. Kinesiology** (2011) \| Dalhousie University
 
-## Experience
+### Experience
 
 I have been working primarily as a Strength and Conditioning Coach with elite winter sport athletes since 2015. Over the past 10 years I have been fortunate to coach multiple Olympic medalists while travelling all over the world, including the 2022 Olympic Winter Games in Beijing.
