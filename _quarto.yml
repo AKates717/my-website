@@ -8,7 +8,7 @@ website:
     title: false
     logo: images/AK_logo1_transparent-crop.png
     logo-alt: "Take me to the homepage"
-    pinned: true
+    pinned: false
     right:
       - href: about.qmd
         text: About
@@ -19,8 +19,8 @@ website:
     
 format:
   html:
-    theme: styles.scss
-    mainfont: Moderustic
+    #theme: tweaks.scss
+    #mainfont: Moderustic
     toc: true
     page-layout: full
     link-external-newwindow: true

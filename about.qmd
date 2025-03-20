@@ -10,6 +10,7 @@ about:
     - icon: envelope
       text: Email
       href: mailto:akates@uvic.ca
+toc: false
 bibliography: references.bib
 ---
 

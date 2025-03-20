@@ -6,6 +6,7 @@ author:
 date: 08-13-2024
 categories: ["S&C"] # self-defined categories
 image: spikeball-canada.jpg
+#title-block-banner: spikeball-canada.jpg
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 bibliography: references.bib
 ---

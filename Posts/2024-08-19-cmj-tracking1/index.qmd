@@ -4,7 +4,7 @@ description: "In part one of this series, we will create a simple visualization 
 author:
   - name: Andrew Kates
     url: https://github.com/AKates717
-date: 08-19-2024
+date: 03-19-2025
 categories: ["S&C","R", "ggplot2"]
 image: CMJ.ppm
 # format: 
@@ -102,7 +102,7 @@ If you are new to ggplot, this code reads:
 
 > "Take the data in `recent_five` , create a plot with `Date` on the x-axis, then calculate the mean of `flight_height_tov` and plot it on the y-axis".
 
-We now have a basic plot for our primary outcome measure, mean jump height.
+We now have a basic plot for our primary outcome measure; mean jump height.
 
 Our next step is to add maximum jump height. But before we continue adding layers to the plot, let's customize the look of our plot.
 
