@@ -6,14 +6,12 @@ about:
   template: jolla
   image-width: 17em
   links:
-    - icon: instagram
-      text: instagram
-      href: https://instagram.com
+    - icon: linkedin
+    - text: "{{< iconify simple-icons:orcid >}}"
+      href: https://orcid.org/0000-0001-9850-4765
     - icon: github
-      text: Github
       href: https://github.com/AKates717
     - icon: envelope
-      text: Email
       href: mailto:akates@uvic.ca
 ---
 

@@ -83,13 +83,8 @@ defaults:
   quarto:
     format:
       html:
-        css: |
-          .quarto-code-annotation-hover {
-            background-color: white !important; /* Set annotation popups to white */
-            color: black !important; /* Ensure text is readable */
-            border: 1px solid #ddd !important; /* Light grey border */
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15) !important; /* Soft shadow */
-          }
+        css: styles.css
+
             
             
             

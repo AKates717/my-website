@@ -19,6 +19,7 @@ code-tools: true
 editor_options: 
   chunk_output_type: console
 reference-location: document
+toc-location: left
 code-annotations: hover
 filters:
   - line-highlight

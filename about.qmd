@@ -4,11 +4,12 @@ about:
   template: trestles
   image: images/M&J-77.jpg
   links:
+    - icon: linkedin
+    - text: "{{< iconify simple-icons:orcid >}}"
+      href: https://orcid.org/0000-0001-9850-4765
     - icon: github
-      text: Github
       href: https://github.com/AKates717
     - icon: envelope
-      text: Email
       href: mailto:akates@uvic.ca
 toc: false
 bibliography: references.bib
@@ -28,7 +29,7 @@ Practical Data Science for Sport
 
 **PhD Student** (Current) \| University of Victoria
 
-**M.Sc. Kinesiology** (2014) \| University of Victoria
+**M.Sc. Exercise Physiology** (2014) \| University of Victoria
 
 **B.Sc. Kinesiology** (2011) \| Dalhousie University
 

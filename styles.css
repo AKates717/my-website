@@ -1,0 +1,71 @@
+/* ============================
+   Fix Code Tools Dropdown Button
+   ============================ */
+button.code-tools-button,
+button.code-tools-dropdown,
+button.dropdown-toggle {
+    background-color: #e0e0e0 !important;  /* Light grey background */
+    color: black !important;               /* Force visible text */
+    border: 1px solid #ccc !important;     /* Add subtle border */
+}
+
+/* Ensure text inside button is always visible */
+button.code-tools-button span,
+button.code-tools-dropdown span {
+    color: black !important;
+}
+
+/* Hover effect */
+button.code-tools-button:hover,
+button.code-tools-dropdown:hover,
+button.dropdown-toggle:hover {
+    background-color: #d0d0d0 !important;  /* Slightly darker grey */
+    color: black !important;
+}
+
+/* ============================
+   Fix Dropdown Menu Styling
+   ============================ */
+.dropdown-menu {
+    background-color: white !important;  /* Ensure dropdown has white background */
+    border: 1px solid #ccc !important;   /* Add subtle border */
+}
+
+/* Fix dropdown menu items (Show All Code, Hide All Code) */
+.dropdown-menu .dropdown-item {
+    color: black !important;  /* Force black text */
+    background-color: white !important;  /* White background */
+    padding: 10px 15px !important;  /* Improve padding for readability */
+    font-size: 16px !important;  /* Ensure readable font size */
+}
+
+/* Fix hover styling for dropdown items */
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0 !important;  /* Slight grey background on hover */
+    color: black !important;
+    text-decoration: none !important;
+}
+
+/* ============================
+   Fix Invisible Text Issue
+   ============================ */
+.dropdown-item {
+    color: black !important; /* Ensure dropdown text is visible */
+    background-color: white !important;
+}
+
+/* Make sure the dropdown text is always readable */
+a.dropdown-item {
+    color: black !important;
+    background-color: white !important;
+}
+
+/* ============================
+   Fix Code Block Annotations Hover
+   ============================ */
+div.code-annotation:hover {
+    background-color: white !important;  /* Set annotation popup to white */
+    color: black !important;
+    border: 1px solid #ccc !important;
+}
+
