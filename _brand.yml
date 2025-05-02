@@ -25,10 +25,11 @@ color:
   palette:
     white: "#FFFFFF"
     black: "#000000"
+    light-grey: "#FCFCFC"
     red: "#D71920"  # From Canadian Olympic branding
     grey: "#A7A9AC"
   foreground: black
-  background: white
+  background: light-grey
   primary: red
   secondary: grey
   success: "#4CAF50"
