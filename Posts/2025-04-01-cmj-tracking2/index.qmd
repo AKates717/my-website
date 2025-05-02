@@ -6,7 +6,7 @@ author:
     url: https://github.com/AKates717
 date: 05-01-2025
 categories: ["S&C","R", "ggplot2"]
-image: CMJ.ppm
+image: CMJ1.png
 # format: 
 #   html: 
 #     fig-width: 4
