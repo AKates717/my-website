@@ -301,7 +301,7 @@ ggplotly(plot, tooltip = "text") %>%
 
 ## Before and After
 
-By viewing the standard `ggplotly` side-by-side with the upgraded plot, you can see how these changes have greatly improved the appearance and readability of the plot.
+By viewing the standard `ggplotly` side-by-side with the upgraded plot, and interacting with each one, you can see how these changes have greatly improved the readability of the plot.
 
 ```{r}
 #| label: fig-cmj5

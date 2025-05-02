@@ -7,12 +7,17 @@ about:
   image-width: 17em
   links:
     - icon: linkedin
+      href: https://www.linkedin.com/in/andrew-kates-a50729331/
+      target: _blank
     - text: "{{< iconify simple-icons:orcid >}}"
       href: https://orcid.org/0000-0001-9850-4765
+      target: _blank
     - icon: github
       href: https://github.com/AKates717
+      target: _blank
     - icon: envelope
       href: mailto:akates@uvic.ca
+      target: _blank
 ---
 
 ::: {style="text-align: center;"}

@@ -298,6 +298,6 @@
     "href": "Posts/2025-04-01-cmj-tracking2/index.html#before-and-after",
     "title": "Jump Analysis in R - Part 2: Creating an Interactive Plot",
     "section": "Before and After",
-    "text": "Before and After\nBy viewing the standard ggplotly side-by-side with the upgraded plot, you can see how these changes have greatly improved the appearance and readability of the plot.\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Standard ggplotly\n\n\n\n\n\n\n\n\n\n\n\n\n(b) Upgraded ggplotly, nicely formatted\n\n\n\n\n\n\n\nFigure 6: A comparison to highlight the improvements we’ve made to a standard ggplotly."
+    "text": "Before and After\nBy viewing the standard ggplotly side-by-side with the upgraded plot, and interacting with each one, you can see how these changes have greatly improved the readability of the plot.\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Standard ggplotly\n\n\n\n\n\n\n\n\n\n\n\n\n(b) Upgraded ggplotly, nicely formatted\n\n\n\n\n\n\n\nFigure 6: A comparison to highlight the improvements we’ve made to a standard ggplotly."
   }
 ]
