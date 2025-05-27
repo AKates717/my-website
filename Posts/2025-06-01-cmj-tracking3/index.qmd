@@ -1,0 +1,162 @@
+---
+title: "Jump Analysis in R - Part 3: "
+description: "In part three of this series, we will add some data analysis showing significant differences in jump performance between days"
+author:
+  - name: Andrew Kates
+    url: https://github.com/AKates717
+date: 06-01-2025
+categories: ["S&C","R", "ggplot2"]
+image: CMJ1.png
+# format: 
+#   html: 
+#     fig-width: 4
+#     fig-height: 3
+draft: true
+execute: 
+  echo: true
+code-fold: show
+code-tools: true
+editor_options: 
+  chunk_output_type: console
+reference-location: document
+toc-location: left
+code-annotations: hover
+filters:
+  - line-highlight
+---
+
+In the first two parts of this series we [created a plot](https://andrewkates.netlify.app/Posts/2024-08-19-cmj-tracking1/ "Part 1") to visualize jump performance, and then made that plot [interactive](https://andrewkates.netlify.app/Posts/2025-04-01-cmj-tracking2/ "Part 2") in order to better communicate the information to our audience.
+
+```{r}
+#| label: setup0
+#| echo: false
+#| output: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(plotly)
+
+recent_five <- read_csv("recent_five.csv") %>%
+  mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
+
+ak_plot_theme <- function(..., base_size = 12) {
+  theme(
+    text = element_text(size = base_size),
+    axis.ticks = element_blank(),
+    axis.title = element_text(color = "black",
+                              face = "bold"),
+    axis.text = element_text(color = "black",
+                             face = "bold"),
+    axis.text.x = element_text(angle = 40, hjust =0.6, vjust = 0.8),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 16,
+                              color = "black",
+                              vjust = 5),
+    plot.subtitle = element_text(color = "black",
+                                 hjust = 0.5),
+    plot.caption = element_text(size = 8,
+                                face = "italic",
+                                color = "black"),
+    panel.grid.major =  element_line(color = "#e0e0e0"),
+    panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff"),
+    plot.background = element_blank(),
+    panel.border = element_blank())
+}
+
+#draw a line between the mean and the max jump height
+mean_peak <- function(x) {
+  data.frame(y = (mean(x) + 0.0001),
+             ymax = max(x),
+             ymin = mean(x))
+}
+```
+
+```{r}
+#| label: fig-cmj1
+#| fig-cap: Interactive Plot Showing Five Most Recent CMJ Assessments
+#| echo: false
+
+plot <- recent_five %>% 
+  ggplot(aes(x = factor(Date, ordered = T), text = date_mmmddyear)) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+
+ggplotly(plot, tooltip = "text") %>%
+    style(hovertemplate = "<b>%{text}</b> <br><i>Mean:</i>  %{y}<extra></extra>", traces = 1) %>% 
+    style(text = paste(recent_five$Jump, "\n",
+                       recent_five$flight_height_tov), traces = 4) %>%
+    style(text = paste("<b>Five Day Average:</b>",mean(recent_five$flight_height_tov) %>% round(2)), traces = 5) %>%
+    style(hoverinfo = "skip", traces = c(2,3)) %>%
+    config(displaylogo = FALSE) %>%
+    config(modeBarButtonsToRemove = c("hoverCompare", "hoverclosest", "zoomIn2d", "zoomOut2d", "lasso2d"))
+```
+
+Now in Part 3, we will add some statistical analysis to our plot, in order to clearly see when jump performance has increased or decreased.
+
+------------------------------------------------------------------------
+
+# Overview
+
+There are many options that we could use in order to determine if today's jump height is different from the previous day. In future blog posts I will explore different methods to determine statistically significant changes in performance, but today I will keep it simple by using only the Technical Error of Measurement (TEM).
+
+The TEM is an estimate of the random measurement error in repeated observations. It allows us to determine whether the difference between observations is likely to be real (i.e. a potential change in neuromuscular status) or due to random measurement error.
+
+It should be noted that the TEM does not detect real differences. At this point we are only checking to see if the difference is *potentially*real.
+
+Here are the steps we will walk through in this post:
+
+1.  Calculate TEM using a new data set containing all of the historical jump data for this particular athlete.
+2.  Determine when the difference between daily performances is above or below the TEM.
+3.  Add a symbol to our interactive plot to indicate potentially real changes in jump height.
+
+------------------------------------------------------------------------
+
+# 1. Calculate TEM
+
+Firstly, we will need a larger dataset in order to more accurately calculate TEM. Once again, I've created some fictional jump height results which you can find here.
+
+```{r}
+#| output: false
+
+athlete1 <- read_csv("athlete1.csv") %>%
+  mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
+
+```
+
+Three Steps
+
+1.  Create a new dataframe which returns a mean jump height for each day and also the difference in jump height between consecutive days.
+
+2.  Use the computed differences to calculate TEM
+
+3.  Create a column which returns a specific value when the difference in jump scores between consecutive days is greater than the TEM.
+
+```{r}
+  
+#Create a mean score for each datae
+TEM_df <- recent_five %>%
+    group_by(Date) %>% #<1>
+    dplyr::summarise(mean = mean(flight_height_tov)) %>%
+    mutate(diff = c(0,diff(mean)))
+
+  TEM <- sqrt((sum(TEM_df$diff)^2) / (2 * nrow(TEM_df)))
+  
+  TEM_df <- TEM_df %>%
+    mutate(real = ifelse(abs(diff) > TEM, "*", NA))
+```
+
+# 2. Determine if Change \<\> TEM
+
+# 3. Communicate real changes in the plot
