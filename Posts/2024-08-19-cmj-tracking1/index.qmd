@@ -60,16 +60,16 @@ We will start by installing and loading all necessary packages.
 #| output: false
 
 library(tidyverse)
-library(readxl)
+library(vroom)
 library(janitor)
 ```
 
-For the purposes of this post, I've created a simple spreadsheet containing five days worth of CMJ results for a fictional athlete. You can access the file [here](https://github.com/AKates717/my-website/blob/master/Posts/2024-08-19-cmj-tracking1/recent_five.csv), or you can create your own in excel and read it into R Studio, as seen below. The data will be loaded into the R Studio Environment as a data-frame entitled `recent_five`.
+For the purposes of this post, I've created a simple spreadsheet containing five days worth of CMJ results for a fictional athlete. You can access the file [here](https://github.com/AKates717/my-website/blob/master/Posts/2024-08-19-cmj-tracking1/recent_five.csv), or you can create your own in excel and read it into R Studio. The data can be loaded into the R Studio Environment using the `vroom` package, and assigned as a data-frame entitled `recent_five`.
 
 ```{r}
 #| output: false
 
-recent_five <- read_csv("recent_five.csv")
+recent_five <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/recent_five.csv")
 ```
 
 ```{r}

@@ -3,7 +3,7 @@ title: "Why warm-up when you can play Spikeball?"
 description: "Reminiscing on an outside-the-box solution to improve pre-skiing warm-up in freestyle skiers"
 author:
   - name: Andrew Kates
-date: 08-13-2024
+date: 01-13-2025
 categories: ["S&C"] # self-defined categories
 image: spikeball-canada.jpg
 #title-block-banner: spikeball-canada.jpg

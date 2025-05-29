@@ -34,10 +34,10 @@ In [Part One](https://andrewkates.netlify.app/Posts/2024-08-19-cmj-tracking1/) o
 #| output: false
 
 library(tidyverse)
-library(readxl)
+library(vroom)
 library(janitor)
 
-recent_five <- read_csv("recent_five.csv")
+recent_five <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/recent_five.csv")
 
 ak_plot_theme <- function(..., base_size = 12) {
   theme(
@@ -108,7 +108,7 @@ In this post, I will show you how to use `plotly` to make our plot interactive, 
 
 ## 1a. Getting Set Up
 
-If you are starting from scratch and do not have all the data loaded from the [previous](https://andrewkates.netlify.app/Posts/2024-08-19-cmj-tracking1/ "Part 1") post, you will need to download the jump dale file [here](https://github.com/AKates717/my-website/blob/master/Posts/2024-08-19-cmj-tracking1/recent_five.csv). You will then need to open and copy the code below into your R environment.
+If you are starting from scratch and do not have all the data loaded from the [previous](https://andrewkates.netlify.app/Posts/2024-08-19-cmj-tracking1/ "Part 1") post, you will need to download the jump data file [here](https://github.com/AKates717/my-website/blob/master/recent_five.csv). You will then need to open and copy the code below into your R environment.
 
 ```{r}
 #| echo: true
@@ -116,10 +116,10 @@ If you are starting from scratch and do not have all the data loaded from the [p
 #| code-fold: true
 
 library(tidyverse)
-library(readxl)
+library(vroom)
 library(janitor)
 
-recent_five <- read_csv("recent_five.csv")
+recent_five <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/recent_five.csv")
 
 ak_plot_theme <- function(..., base_size = 12) {
   theme(

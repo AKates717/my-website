@@ -4,14 +4,14 @@ description: "In part three of this series, we will add some data analysis showi
 author:
   - name: Andrew Kates
     url: https://github.com/AKates717
-date: 06-01-2025
+date: 05-29-2025
 categories: ["S&C","R", "ggplot2"]
-image: CMJ1.png
-# format: 
-#   html: 
-#     fig-width: 4
-#     fig-height: 3
-draft: true
+image: images/plot_plus_stats.png
+format:
+  html:
+    fig-width: 4
+    fig-height: 3
+draft: false
 execute: 
   echo: true
 code-fold: show
@@ -23,6 +23,8 @@ toc-location: left
 code-annotations: hover
 filters:
   - line-highlight
+bibliography: references.bib
+csl: scandinavian-journal-of-medicine-and-science-in-sports.csl
 ---
 
 In the first two parts of this series we [created a plot](https://andrewkates.netlify.app/Posts/2024-08-19-cmj-tracking1/ "Part 1") to visualize jump performance, and then made that plot [interactive](https://andrewkates.netlify.app/Posts/2025-04-01-cmj-tracking2/ "Part 2") in order to better communicate the information to our audience.
@@ -33,11 +35,11 @@ In the first two parts of this series we [created a plot](https://andrewkates.ne
 #| output: false
 
 library(tidyverse)
-library(readxl)
 library(janitor)
 library(plotly)
+library(vroom)
 
-recent_five <- read_csv("recent_five.csv") %>%
+recent_five <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/recent_five.csv") %>%
   mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
 
 ak_plot_theme <- function(..., base_size = 12) {
@@ -107,56 +109,306 @@ Now in Part 3, we will add some statistical analysis to our plot, in order to cl
 
 ------------------------------------------------------------------------
 
-# Overview
+# Defining the Approach
 
-There are many options that we could use in order to determine if today's jump height is different from the previous day. In future blog posts I will explore different methods to determine statistically significant changes in performance, but today I will keep it simple by using only the Technical Error of Measurement (TEM).
+> The Question: Is Today's performance meaningfully better or worse than yesterday's performance?
 
-The TEM is an estimate of the random measurement error in repeated observations. It allows us to determine whether the difference between observations is likely to be real (i.e. a potential change in neuromuscular status) or due to random measurement error.
+There are several options that we could use to highlight meaningful changes in jump height. In this post I will walk through an example using the Minimal Detectable Change (MDC). MDC can be interpreted as the boundary of measurement error, meaning that any changes in jump height outside of that boundary can be considered a true change [@riemann2018].
 
-It should be noted that the TEM does not detect real differences. At this point we are only checking to see if the difference is *potentially*real.
+::: {.callout-tip appearance="simple"}
+## If the change in jump height between days is greater than the MDC, then that change is not due to measurement error and can be considered a real change in performance.
+:::
 
-Here are the steps we will walk through in this post:
+Here are the steps we will follow in order to visualize changes greater than the MDC on our plot:
 
-1.  Calculate TEM using a new data set containing all of the historical jump data for this particular athlete.
-2.  Determine when the difference between daily performances is above or below the TEM.
-3.  Add a symbol to our interactive plot to indicate potentially real changes in jump height.
+1.  **Identify the MDC using historical data for this athlete**
+
+    i.  Identify the Intra-Class Correlation Coefficient (ICC)
+
+    ii. Calculate the Standard Error of Measurement (SEM)
+
+    iii. Calculate the MDC
+
+2.  **Determine when the difference between consecutive daily performances is above or below the MDC.**
+
+3.  **Add a symbol to our interactive plot to indicate potentially real changes in jump height.**
 
 ------------------------------------------------------------------------
 
-# 1. Calculate TEM
+# Getting Set Up
 
-Firstly, we will need a larger dataset in order to more accurately calculate TEM. Once again, I've created some fictional jump height results which you can find here.
+If you are starting from scratch and do not have all the data loaded from the [previous](https://andrewkates.netlify.app/Posts/2025-04-01-cmj-tracking2/ "Part 2") post, you will need to open this code, copy it into your R environment, and run the code.
+
+```{r}
+#| echo: true
+#| output: false
+#| code-fold: true
+
+#load required packages
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(plotly)
+library(vroom)
+
+#read the data into R and add formatted date column
+recent_five <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/recent_five.csv") %>%
+  mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
+
+#custom theme
+ak_plot_theme <- function(..., base_size = 12) {
+  theme(
+    text = element_text(size = base_size),
+    axis.ticks = element_blank(),
+    axis.title = element_text(color = "black",
+                              face = "bold"),
+    axis.text = element_text(color = "black",
+                             face = "bold"),
+    axis.text.x = element_text(angle = 40, hjust =0.6, vjust = 0.8),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 16,
+                              color = "black",
+                              vjust = 5),
+    plot.subtitle = element_text(color = "black",
+                                 hjust = 0.5),
+    plot.caption = element_text(size = 8,
+                                face = "italic",
+                                color = "black"),
+    panel.grid.major =  element_line(color = "#e0e0e0"),
+    panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff"),
+    plot.background = element_blank(),
+    panel.border = element_blank())
+}
+
+#function to draw a line between the mean and the max jump height
+mean_peak <- function(x) {
+  data.frame(y = (mean(x) + 0.0001),
+             ymax = max(x),
+             ymin = mean(x))
+}
+
+#The Plot
+plot <- recent_five %>% 
+  ggplot(aes(x = factor(Date, ordered = T), text = date_mmmddyear)) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+
+ggplotly(plot, tooltip = "text") %>%
+    style(hovertemplate = "<b>%{text}</b> <br><i>Mean:</i>  %{y}<extra></extra>", traces = 1) %>% 
+    style(text = paste(recent_five$Jump, "\n",
+                       recent_five$flight_height_tov), traces = 4) %>%
+    style(text = paste("<b>Five Day Average:</b>",mean(recent_five$flight_height_tov) %>% round(2)), traces = 5) %>%
+    style(hoverinfo = "skip", traces = c(2,3)) %>%
+    config(displaylogo = FALSE) %>%
+    config(modeBarButtonsToRemove = c("hoverCompare", "hoverclosest", "zoomIn2d", "zoomOut2d", "lasso2d"))
+```
+
+Next, we will need to read in some historical data for this fictional athlete, in order to more accurately calculate MDC. Once again, I've created some fictional jump height results which you can find [here](https://github.com/AKates717/my-website/blob/master/Posts/2025-06-01-cmj-tracking3/Athlete1.csv "Athlete1"). Just like with the `recent_five` data we will read the csv into a dataframe, arrange the rows by date, starting with the most recent, and create a new column with a nicely formatted date. As you can see below, the new data set contains 102 jumps.
 
 ```{r}
 #| output: false
 
-athlete1 <- read_csv("athlete1.csv") %>%
+athlete1 <- vroom("https://raw.githubusercontent.com/AKates717/my-website/master/Posts/2025-06-01-cmj-tracking3/Athlete1.csv") %>%
+  arrange(desc(Date)) %>%
   mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
 
+athlete1
 ```
-
-Three Steps
-
-1.  Create a new dataframe which returns a mean jump height for each day and also the difference in jump height between consecutive days.
-
-2.  Use the computed differences to calculate TEM
-
-3.  Create a column which returns a specific value when the difference in jump scores between consecutive days is greater than the TEM.
 
 ```{r}
-  
-#Create a mean score for each datae
-TEM_df <- recent_five %>%
-    group_by(Date) %>% #<1>
-    dplyr::summarise(mean = mean(flight_height_tov)) %>%
-    mutate(diff = c(0,diff(mean)))
+#| echo: false
 
-  TEM <- sqrt((sum(TEM_df$diff)^2) / (2 * nrow(TEM_df)))
-  
-  TEM_df <- TEM_df %>%
-    mutate(real = ifelse(abs(diff) > TEM, "*", NA))
+athlete1
 ```
 
-# 2. Determine if Change \<\> TEM
+We now have everything we need to proceed with adding MDC analysis to our plot.
+
+------------------------------------------------------------------------
+
+# 1. Identify the MDC
+
+We will calculate the MDC using the following equations:
+
+$$
+\text{SEM} = SD \times\sqrt{1 -ICC}
+$$
+
+$$
+\text{MDC}_{95} = \text{SEM} \times 1.96 \times \sqrt{2}
+$$
+
+For the purposes of this post, we will estimate the ICC for jump height as 0.95. Jump height measured by take-off velocity is typically very reliable, and I have calculated an ICC of 0.98 in the group of athletes I currently work with. I don't think 0.95 is too much of a stretch here, but it should be noted that the higher the ICC is, the lower the SEM and MDC will be. Additionally, note that MDC is being calculated based on the 95% confidence interval and will be represented by MDC~95~ @devet2006 .
+
+The following code will:
+
+1.  Create a new dataframe called `mean_scores` which gives the mean jump height for each day
+
+2.  Use the mean jump heights to calculate the SD, SEM and ultimately the MDC.
+
+```{r}
+#| output: false
+
+#Calculate the average jump height per session
+mean_scores <- athlete1 %>%
+  dplyr::group_by(Date) %>%
+  dplyr::summarise(mean_jump_height = mean(flight_height_tov))
+
+#Set ICC
+icc <- 0.95
+
+#Calculate SD of session means
+sd <- sd(mean_scores$mean_jump_height)
+
+#Calculate SEM
+sem <- sd * sqrt(1 - icc)
+
+#Calculate MDC at 95% confidence
+mdc <- sem * 1.96 * sqrt(2)
+```
+
+This gives us the following values:
+
+$$
+\text{SEM} = \text{0.41cm}
+$$
+
+$$
+\text{MDC}_{95} = \text{1.15cm}
+$$
+
+This means that any change in jump height by \> 1.15cm will be considered a real change in performance.
+
+------------------------------------------------------------------------
+
+# 2. Determine if Change Exceeds MDC
+
+This step involves adding two columns to the `mean_scores` dataframe:
+
+1.  A column displaying the difference between the current day's jump height and the previous one.
+
+2.  A column that returns a symbol ( \* ) whenever the difference score exceeds the MDC.
+
+```{r}
+
+#Add difference scores between consecutive assessment days
+mean_scores <- mean_scores %>%
+  mutate(diff = c(0, diff(mean_jump_height)))
+
+#Add asterisk if the difference score is greater than the mdc
+mean_scores <- mean_scores %>%
+  mutate(real = ifelse(abs(diff) > mdc, "*", NA))
+
+```
+
+You should now have a `mean_scores` dataframe that looks like this:
+
+```{r}
+#| echo: false
+mean_scores
+```
+
+------------------------------------------------------------------------
 
 # 3. Communicate real changes in the plot
+
+Since we are working with the larger data set `athlete1`, which has exactly the same structure as `recent_five` but with more data, let's plot that one first.
+
+The change to the code is actually quite simple, we only need to add one line of code to our original plot. This addition will be a `geom_text` layer which will return the data in `mean_scores$real`. When the difference score is \<1.15cm, the `geom_text` returns `NA` and prints nothing on the plot. When the difference score is \>1.15cm, the `geom_text` will add **`*`**. Run the code below and test it out[^1].
+
+[^1]: Do you see any other differences in this code, compared to our previous plot?
+
+    Since we are plotting a different dataframe, we will also need to change the dataframe in the plotly `style` calls to make sure our tooltips are still providing the correct information.
+
+```{r}
+#| label: fig-cmj2
+#| fig-cap: Interactive plot including real changes in performance identified using the MDC.
+#| echo: true
+
+plot <- athlete1 %>% #<<
+  ggplot(aes(x = factor(Date, ordered = T), text = date_mmmddyear)) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
+  geom_text(data = mean_scores, aes(x = factor(Date, ordered = T), y = mean_jump_height, label = real), inherit.aes = FALSE, size = 8, nudge_x = 0.15) + #<<
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+
+ggplotly(plot, tooltip = "text") %>%
+    style(hovertemplate = "<b>%{text}</b> <br><i>Mean:</i>  %{y}<extra></extra>", traces = 1) %>% 
+    style(text = paste(athlete1$Jump, "\n", #<<
+                       athlete1$flight_height_tov), traces = 4) %>% #<<
+    style(text = paste("<b>Five Day Average:</b>",mean(athlete1$flight_height_tov) %>% round(2)), traces = 5) %>% #<<
+    style(hoverinfo = "skip", traces = c(2,3)) %>%
+    config(displaylogo = FALSE) %>%
+    config(modeBarButtonsToRemove = c("hoverCompare", "hoverclosest", "zoomIn2d", "zoomOut2d", "lasso2d"))
+```
+
+As you can see, the asterisks are there, and as a bonus we have a whole new plot which allows us to visualize trends in jump height over multiple years. However, this plot is a little too messy to clearly see the asterisks, which is the whole point of this post[^2].
+
+[^2]: You could actually just use the Zoom function of the interactive plot to select section of the plot you want to have a closer look at...
+
+Looking at the five most recent jumps on the far right of the plot, I don't see any indications of real changes in jump height at that time. I do see some significant changes in jump height around September 2022, so let's take a look at five assessment dates between Sep 30, 2022 and Feb 16, 2024.
+
+We will just need one additional step of filtering the data in `athlete1` and `mean_scores` to contain only the dates we want to plot. Let's see if we can land this plane.
+
+```{r}
+#| label: fig-cmj4
+#| fig-cap: Interactive Plot Showing Five Most Recent CMJ Assessments with Stats
+#| echo: true
+
+#filter dates #<<
+athlete1_filt <- athlete1 %>% #<<
+  filter(between(Date, as.Date("2022-09-30"), as.Date("2024-02-16"))) #<<
+
+mean_scores_filt <- mean_scores %>% #<<
+  filter(Date %in% athlete1_filt$Date) #<<
+
+plot <- athlete1_filt %>% 
+  ggplot(aes(x = factor(Date, ordered = T), text = date_mmmddyear)) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
+  geom_text(data = mean_scores_filt, aes(x = factor(Date, ordered = T), y = mean_jump_height, label = real), inherit.aes = FALSE, size = 8, nudge_x = 0.15) + #<<
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+
+ggplotly(plot, tooltip = "text") %>%
+    style(hovertemplate = "<b>%{text}</b> <br><i>Mean:</i>  %{y}<extra></extra>", traces = 1) %>% 
+    style(text = paste(athlete1_filt$Jump, "\n", #<<
+                       athlete1_filt$flight_height_tov), traces = 4) %>% #<<
+    style(text = paste("<b>Five Day Average:</b>",mean(athlete1_filt$flight_height_tov) %>% round(2)), traces = 5) %>% #<<
+    style(hoverinfo = "skip", traces = c(2,3)) %>%
+    config(displaylogo = FALSE) %>%
+    config(modeBarButtonsToRemove = c("hoverCompare", "hoverclosest", "zoomIn2d", "zoomOut2d", "lasso2d"))
+```
+
+The above plot is a good example of how valuable it can be to use a statistical approach when monitoring jump performance. It seems pretty clear that there was a substantial decrease in performance between Sep 30, 2022 and Nov 02, 2023, however the two subsequent increases in performance are less obvious, and it is helpful to know that these are likely real changes in performance.
+
+Plane Landed.
+
+![](images/nathan-fielder-nathan-for-you.gif){fig-alt="Go watch the Rehearsal Season 2 Now!" fig-align="center"}

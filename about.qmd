@@ -2,7 +2,7 @@
 title: ""
 about:
   template: trestles
-  image: images/M&J-77.jpg
+  image: images/AK_CS_SD.jpeg
   links:
     - icon: linkedin
       href: https://www.linkedin.com/in/andrew-kates-a50729331/
