@@ -1,6 +1,6 @@
 ---
-title: "Jump Analysis in R - Part 3: "
-description: "In part three of this series, we will add some data analysis showing significant differences in jump performance between days"
+title: "Jump Analysis in R - Part 3: Identifying Meaningful Changes in Performance"
+description: "In part three of this series, we will add some data analysis highlighting meaningful differences in jump performance between days"
 author:
   - name: Andrew Kates
     url: https://github.com/AKates717
