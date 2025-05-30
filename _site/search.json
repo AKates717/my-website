@@ -4,7 +4,7 @@
     "href": "posts.html",
     "title": "Blog",
     "section": "",
-    "text": "Jump Analysis in R - Part 3:\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part three of this series, we will add some data analysis showing significant differences in jump performance between days\n\n\n\n\n\nMay 29, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nJump Analysis in R - Part 2: Creating an Interactive Plot\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part two of this series, we will make the plot interactive, allowing the user to see all of the values being plotted\n\n\n\n\n\nMay 1, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nJump Analysis in R - Part 1: Visualizing Individual Performance\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part one of this series, we will create a simple visualization to track the countermovement jump performance of one athlete\n\n\n\n\n\nMar 19, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nWhy warm-up when you can play Spikeball?\n\n\n\n\n\n\nS&C\n\n\n\nReminiscing on an outside-the-box solution to improve pre-skiing warm-up in freestyle skiers\n\n\n\n\n\nAug 13, 2024\n\n\nAndrew Kates\n\n\n\n\n\n\nNo matching items"
+    "text": "Jump Analysis in R - Part 3: Identifying Meaningful Changes in Performance\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part three of this series, we will add some data analysis highlighting meaningful differences in jump performance between days\n\n\n\n\n\nMay 29, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nJump Analysis in R - Part 2: Creating an Interactive Plot\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part two of this series, we will make the plot interactive, allowing the user to see all of the values being plotted\n\n\n\n\n\nMay 1, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nJump Analysis in R - Part 1: Visualizing Individual Performance\n\n\n\n\n\n\nS&C\n\n\nR\n\n\nggplot2\n\n\n\nIn part one of this series, we will create a simple visualization to track the countermovement jump performance of one athlete\n\n\n\n\n\nMar 19, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\n\n\n\n\n\n\nWhy warm-up when you can play Spikeball?\n\n\n\n\n\n\nS&C\n\n\n\nReminiscing on an outside-the-box solution to improve pre-skiing warm-up in freestyle skiers\n\n\n\n\n\nJan 13, 2025\n\n\nAndrew Kates\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -303,14 +303,14 @@
   {
     "objectID": "Posts/2025-06-01-cmj-tracking3/index.html",
     "href": "Posts/2025-06-01-cmj-tracking3/index.html",
-    "title": "Jump Analysis in R - Part 3:",
+    "title": "Jump Analysis in R - Part 3: Identifying Meaningful Changes in Performance",
     "section": "",
     "text": "In the first two parts of this series we created a plot to visualize jump performance, and then made that plot interactive in order to better communicate the information to our audience.\nFigure 1: Interactive Plot Showing Five Most Recent CMJ Assessments\nNow in Part 3, we will add some statistical analysis to our plot, in order to clearly see when jump performance has increased or decreased."
   },
   {
     "objectID": "Posts/2025-06-01-cmj-tracking3/index.html#footnotes",
     "href": "Posts/2025-06-01-cmj-tracking3/index.html#footnotes",
-    "title": "Jump Analysis in R - Part 3:",
+    "title": "Jump Analysis in R - Part 3: Identifying Meaningful Changes in Performance",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nDo you see any other differences in this code, compared to our previous plot?\nSince we are plotting a different dataframe, we will also need to change the dataframe in the plotly style calls to make sure our tooltips are still providing the correct information.↩︎\nYou could actually just use the Zoom function of the interactive plot to select section of the plot you want to have a closer look at…↩︎"
   }
