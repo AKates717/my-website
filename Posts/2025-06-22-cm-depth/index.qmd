@@ -1,0 +1,184 @@
+---
+title: "Athlete Neuromuscular Monitoring: Getting the most out of RSImod"
+description: "A discussion of why I like to use RSImod for assessing neuromuscular status in athletes, and some strategies to make sure you get the most out of this metric"
+author:
+  - name: Andrew Kates
+    url: https://github.com/AKates717
+date: 07-01-2025
+categories: ["S&C","R", "ggplot2"]
+image: CMJ.ppm
+# format: 
+#   html: 
+#     fig-width: 4
+#     fig-height: 3
+draft: true
+execute: 
+  echo: true
+code-fold: show
+code-tools: true
+editor_options: 
+  chunk_output_type: console
+reference-location: document
+toc-location: left
+code-annotations: hover
+filters:
+  - line-highlight
+---
+
+When conducting jump testing with athletes, we are of course always interested in how high they jump. Jump height alone, however, may not be the best indicator of neuromuscular status (ref). In fact, it is well established that some athletes have the ability to maintain a consistent jump height by altering their jump strategy.
+
+There is often debate in the sport science community about what metrics to use. Some argue that we need to remain focused on jump height while others enlist an enormous battery of metrics and insist that each is crucial to how the athlete will perform in training or competition that day. As usual, the true answer probably lies somewhere in the middle, and that is where I try to be when creating my approach.
+
+I really like the metric RSImod, and this is generally what I look at first when I'm trying to determine an athlete's neuromuscular status in any given moment. Additionally, I think the best approach is to visualize other metrics alongside RSImod to make sure I'm getting the full picture of what is happening with these jumps.
+
+To me, the cardinal sin is to use too much data, too many metrics. Not only might you confuse yourself, it will be very difficult for you to communicate clear information to coaches and athletes if you are trying to do too much at once.
+
+For now, lets explore how we might monitor RSImod in an athlete, while also keeping an eye on the component metrics that might affect the RSImod score and in turn affect our interpretation of the athlete's status.
+
+**I like RSImod, it is obviosuly highly dependent on TTT, and I like to just keep an eye on CM depth, to make sure that TTT is due to the athlete moving slower, and not due to them changing their strategy by changing their CM depth.**
+
+**In a future post, I will dig into RSImod more, but for now I want to share a method for easily deciding if you can trust the RSImod value that you are seeing.**
+
+-Here is our jump height plot
+
+### Getting Set Up
+
+```{r}
+#| echo: true
+#| output: false
+#| code-fold: true
+
+#load required packages
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(plotly)
+library(vroom)
+
+#read the data into R and add formatted date column
+athlete1 <- vroom("https://raw.githubusercontent.com/AKates717/my-website/master/Posts/2025-06-01-cmj-tracking3/Athlete1.csv") %>%
+  arrange(desc(Date)) %>%
+  mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
+
+#custom theme
+ak_plot_theme <- function(..., base_size = 12) {
+  theme(
+    text = element_text(size = base_size),
+    axis.ticks = element_blank(),
+    axis.title = element_text(color = "black",
+                              face = "bold"),
+    axis.text = element_text(color = "black",
+                             face = "bold"),
+    axis.text.x = element_text(angle = 40, hjust =0.6, vjust = 0.8),
+    plot.title.position = "plot",
+    plot.title = element_text(size = 16,
+                              color = "black",
+                              vjust = 5),
+    plot.subtitle = element_text(color = "black",
+                                 hjust = 0.5),
+    plot.caption = element_text(size = 8,
+                                face = "italic",
+                                color = "black"),
+    panel.grid.major =  element_line(color = "#e0e0e0"),
+    panel.grid.major.x = element_blank(),
+    panel.background = element_rect(fill = "#ffffff"),
+    plot.background = element_blank(),
+    panel.border = element_blank())
+}
+
+#function to draw a line between the mean and the max jump height
+mean_peak <- function(x) {
+  data.frame(y = (mean(x) + 0.0001),
+             ymax = max(x),
+             ymin = mean(x))
+}
+
+#Calculate the average jump height per session
+mean_scores <- athlete1 %>%
+  dplyr::group_by(Date) %>%
+  dplyr::summarise(mean_jump_height = mean(flight_height_tov))
+
+#Set ICC
+icc <- 0.95
+
+#Calculate SD of session means
+sd <- sd(mean_scores$mean_jump_height)
+
+#Calculate SEM
+sem <- sd * sqrt(1 - icc)
+
+#Calculate MDC at 95% confidence
+mdc <- sem * 1.96 * sqrt(2)
+
+#Add difference scores between consecutive assessment days
+mean_scores <- mean_scores %>%
+  mutate(diff = c(0, diff(mean_jump_height)))
+
+#Add asterisk if the difference score is greater than the mdc
+mean_scores <- mean_scores %>%
+  mutate(real = ifelse(abs(diff) > mdc, "*", NA))
+
+
+```
+
+### Our Jump Height Plot
+
+```{r}
+#| label: fig-cmj4
+#| fig-cap: Interactive Plot Showing Five Most Recent CMJ Assessments with Stats
+#| echo: true
+#| code-fold: true
+
+#filter dates #<<
+athlete1_filt <- athlete1 %>% #<<
+  filter(between(Date, as.Date("2022-09-30"), as.Date("2024-02-16"))) #<<
+
+mean_scores_filt <- mean_scores %>% #<<
+  filter(Date %in% athlete1_filt$Date) #<<
+
+plot <- athlete1_filt %>% 
+  ggplot(aes(x = factor(Date, ordered = T), text = date_mmmddyear)) +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "mean", geom = "point", size = 6, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = Date), fun = "max", geom = "point", size = 4, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov), fun.data=mean_peak, geom="pointrange", size = 2, colour = "#D19A2B") +
+  stat_summary(aes(y = flight_height_tov, group = 5), fun = "mean", geom = "line", linewidth = 1, colour = "#D19A2B") +
+  geom_jitter(aes(y = flight_height_tov), shape = 1, size = 4, alpha = 0.5, width = 0.2) +
+  geom_hline(aes(yintercept = mean(flight_height_tov)), alpha = 0.3, linetype = 2, linewidth = 3) +
+  geom_text(data = mean_scores_filt, aes(x = factor(Date, ordered = T), y = mean_jump_height, label = real), inherit.aes = FALSE, size = 8, nudge_x = 0.15) + #<<
+  ak_plot_theme() +
+  labs(
+    x = NULL,
+    y = "Jump Height (cm)",
+    title = NULL)
+
+
+ggplotly(plot, tooltip = "text") %>%
+    style(hovertemplate = "<b>%{text}</b> <br><i>Mean:</i>  %{y}<extra></extra>", traces = 1) %>% 
+    style(text = paste(athlete1_filt$Jump, "\n", #<<
+                       athlete1_filt$flight_height_tov), traces = 4) %>% #<<
+    style(text = paste("<b>Five Day Average:</b>",mean(athlete1_filt$flight_height_tov) %>% round(2)), traces = 5) %>% #<<
+    style(hoverinfo = "skip", traces = c(2,3)) %>%
+    config(displaylogo = FALSE) %>%
+    config(modeBarButtonsToRemove = c("hoverCompare", "hoverclosest", "zoomIn2d", "zoomOut2d", "lasso2d"))
+```
+
+-Recreate it for RSImod
+
+### Getting Set up again
+
+Need the new data.
+
+```{r}
+
+athlete1 <- vroom("https://raw.githubusercontent.com/AKates717/my-website/master/Posts/2025-06-01-cmj-tracking3/Athlete1.csv") %>%
+  arrange(desc(Date)) %>%
+  mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
+```
+
+-Show them together: if jump height is low and RSImod is low, perhaps this is a real indication that our athlete is displaying some neuromuscular fatigue and we may want to intervene or keep an eye on them
+
+-In order to truly understand how RSImod might be changing, we also need to know if time-to -takeoff has changed significantly, and if
+
+-Ultimately I want to know if the athlete used a different strategy than they normally would when asked to jump as high as they can. By looking at TTT and CM-Depth I have a better indicator of their strategy than if I just looked at RSImod alone..
+
+-Next Post: some other "strategy" metrics that you might want to use instead of, or in addition to RSImod, and showing how to set up a dashboard to select which metric you want, without having to look through a cluttered dashboard with too much data
