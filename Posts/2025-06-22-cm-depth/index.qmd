@@ -170,7 +170,7 @@ Need the new data.
 
 ```{r}
 
-athlete1 <- vroom("https://raw.githubusercontent.com/AKates717/my-website/master/Posts/2025-06-01-cmj-tracking3/Athlete1.csv") %>%
+athlete2 <- vroom("https://raw.githubusercontent.com/AKates717/my-website/refs/heads/master/Athlete2.csv") %>%
   arrange(desc(Date)) %>%
   mutate(date_mmmddyear = format(Date, "%b %d, %Y"))
 ```
